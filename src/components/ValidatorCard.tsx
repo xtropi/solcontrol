@@ -1,18 +1,16 @@
 import { theme } from "@/app/theme";
-import Image from "next/image";
 
 export const ValidatorCard = ({ data }: any) => (
   <div
     className={`
     max-w-sm flex flex-col lg:flex-row rounded overflow-hidden shadow-xl 
-    transform transition-transform ease-out duration-300 hover:scale-105 
     h-full w-full rounded-md
     ${theme.cardBackground} ${theme.cardText}
     bg-opacity-40
     `}
   >
     <div
-        style={{'--image-url': `url(${data.iconUrl})`}} 
+      style={{ ["--image-url"]: `url(${data.iconUrl})` }}
       className={`bg-cover bg-center bg-no-repeat bg-[image:var(--image-url)] min-w-32 min-h-32 overflow-hidden ${theme.cardBackground} bg-opacity-40`}
     >
       {/* <img

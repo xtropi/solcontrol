@@ -9,7 +9,7 @@ const config: Config = {
   theme: {
     extend: {        
       backgroundImage: {
-      'avatar-pattern': "url('/img/no_avatar.png')",
+      // 'avatar-pattern': "url('/img/no_avatar.png')",
      }},
   },
   plugins: [],
