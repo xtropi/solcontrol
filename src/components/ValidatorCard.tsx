@@ -1,6 +1,7 @@
-import { theme, darkAccentColor } from "@/app/theme";
+import { theme } from "@/app/theme";
+import Image from "next/image";
 
-export const ValidatorCard = ({ iconUrl, name, website, details }: any) => (
+export const ValidatorCard = ({ data }: any) => (
   <div
     className={`
     max-w-sm flex flex-col lg:flex-row rounded overflow-hidden shadow-xl 
@@ -11,24 +12,27 @@ export const ValidatorCard = ({ iconUrl, name, website, details }: any) => (
     `}
   >
     <div
-      className={`min-w-32 min-h-32 overflow-hidden ${theme.cardBackground} bg-opacity-40`}
+        style={{'--image-url': `url(${data.iconUrl})`}} 
+      className={`bg-cover bg-center bg-no-repeat bg-[image:var(--image-url)] min-w-32 min-h-32 overflow-hidden ${theme.cardBackground} bg-opacity-40`}
     >
-      <img
+      {/* <img
         className="w-full h-full object-cover"
-        src={iconUrl}
+        src={data.iconUrl}
         alt="Validator Icon"
-      />
+      /> */}
     </div>
     <div className="p-4 flex-grow bg-opacity-70">
-      <div className={`font-bold text-xl mb-2 ${theme.cardText}`}>{name}</div>
+      <div className={`font-bold text-xl mb-2 ${theme.cardText}`}>
+        {data.name}
+      </div>
       <a
-        href={website}
+        href={data.website}
         target="_blank"
         className={`text-base ${theme.cardText}`}
       >
-        {website}
+        {data.website}
       </a>
-      <p className={`text-base ${theme.cardText}`}>{details}</p>
+      <p className={`text-base ${theme.cardText}`}>{data.details}</p>
     </div>
   </div>
 );

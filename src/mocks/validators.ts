@@ -1,4 +1,6 @@
-export const validators = {
+import { ValidatorType } from "@/api/types";
+
+export const validators: {data: ValidatorType[]} = {
     "data": [
       {
         "voteId": "1234LB7uvDC23rdCQoK8C3jNwnovUNyeKxz8wC3dghJ5",

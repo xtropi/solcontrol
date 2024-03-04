@@ -1,0 +1,35 @@
+export type ValidatorType = {
+    voteId: string;
+    validatorId: string;
+    apy: number;
+    apyEst: number;
+    apyComparedMax: number;
+    fee: number;
+    totalStake: string;
+    network: string;
+    name: string;
+    details: string;
+    website: string;
+    keybaseUsername?: any;
+    iconUrl: string;
+    inTop33: boolean;
+    isDelinquent: boolean;
+    inJpool: boolean;
+    jpoolLamports: string;
+    svName: string;
+    lastVote: string;
+    nodeVersion: string;
+    epoch: number;
+    inactive: boolean;
+    vaScore: number;
+    vaRootDist: number;
+    vaVoteDist: number;
+    vaSoftware: number;
+    vaPublishedInfo: number;
+    vaSkippedSlot: number;
+    vaSecurityReport: number;
+    vaConsensusMods: number;
+    vaWithdrawer: number;
+    vaDataCenter: number;
+    vaStakeConcentration: number;
+  }
