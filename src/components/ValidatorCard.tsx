@@ -16,7 +16,6 @@ export const ValidatorCard = ({ data }: any) => {
     max-w-md flex flex-col lg:flex-row rounded overflow-hidden ${theme.shadow} 
     h-full w-full rounded-md
     ${theme.cardBackground} ${theme.cardText}
-    bg-opacity-40
     `}
     >
       {iconPath && (
