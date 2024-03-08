@@ -1,6 +1,10 @@
 "use client";
 import { SearchContext } from "@/providers/SearchProvider";
 import { ThemeContext, initThemes } from "@/providers/ThemeProvider";
+import {
+  WalletMultiButton,
+  WalletDisconnectButton,
+} from "@solana/wallet-adapter-react-ui";
 import { ChangeEventHandler, useCallback, useContext, useEffect } from "react";
 
 export const SearchPanel = ({ data }: any) => {
@@ -9,18 +13,23 @@ export const SearchPanel = ({ data }: any) => {
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = useCallback(
     (event) => {
-        // console.log(event.currentTarget?.checked)
+      // console.log(event.currentTarget?.checked)
       setSearch((prevState: any) => ({
-          ...prevState,
+        ...prevState,
         isRecommended: !prevState.isRecommended,
       }));
     },
     [setSearch]
   );
- useEffect(()=>{console.log(searchParams)}, [searchParams])
+  useEffect(() => {
+    console.log(searchParams);
+  }, [searchParams]);
   return (
-    <div className={theme.search}>
-      <label className="inline-flex items-center cursor-pointer">
+    <div className={theme.search+" w-64 p-4 mt-4 ml-4 "}>
+      <div className="grid place-content-center">
+        <WalletMultiButton />
+      </div>
+      <label className="inline-flex items-center cursor-pointer m-3">
         <input
           type="checkbox"
           checked={searchParams.isRecommended}

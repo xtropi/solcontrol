@@ -15,6 +15,7 @@ import {
   PublicKey,
   StakeProgram,
 } from "@solana/web3.js";
+require("@solana/wallet-adapter-react-ui/styles.css");
 // const web3 = require("@solana/web3.js");
 
 type ParsedProgramAccountsResponse = Array<{
@@ -68,7 +69,10 @@ export default function Home() {
   }, [connection, publicKey]);
 
   useEffect(() => {
-    if (!connection) return;
+    if (!publicKey) {
+      setStakedValidators([]);
+      return;
+    }
     promiseStakes().then((data) => {
       if (!data) return;
       // connection.getVoteAccounts().then((voteAccountsRes)=>{
@@ -77,7 +81,7 @@ export default function Home() {
       // });
       setStakedValidators(data);
     });
-  }, [connection, promiseStakes]);
+  }, [publicKey]);
 
   useEffect(() => {
     console.log(stakedValidators);
@@ -109,7 +113,7 @@ export default function Home() {
                 <h1 className="text-3xl font-bold">Your stakes</h1>
               </header>
               <div
-                className={`overflow-y-auto px-4 py-8 bg-opacity-0 ${theme.containerBackground}`}
+                className={`overflow-y-auto px-4 mb-16 bg-opacity-0 ${theme.containerBackground}`}
               >
                 <Grid>
                   {filteredMyValidators.map((validator: any, index: number) => (
@@ -126,7 +130,7 @@ export default function Home() {
                 <h1 className="text-3xl font-bold">SOL Control</h1>
               </header>
               <div
-                className={`overflow-y-auto px-4 py-8 bg-opacity-0 ${theme.containerBackground}`}
+                className={`overflow-y-auto px-4 bg-opacity-0 ${theme.containerBackground}`}
               >
                 <Grid>
                   {filteredAllValidators.map(

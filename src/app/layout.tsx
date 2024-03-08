@@ -14,12 +14,9 @@ import {
 } from "@solana/wallet-adapter-react";
 import {
   WalletModalProvider,
-  WalletMultiButton,
-  WalletDisconnectButton,
 } from "@solana/wallet-adapter-react-ui";
 
 const font = Titillium_Web({ subsets: ["latin"], weight: "300" });
-require("@solana/wallet-adapter-react-ui/styles.css");
 
 // export const metadata: Metadata = {
 //   title: "Sol Control",
@@ -68,8 +65,6 @@ export default function RootLayout({
             <WalletModalProvider>
               <ThemeContext.Provider value={[theme, setTheme]}>
                 <SearchContext.Provider value={[searchParams, setSearch]}>
-                  <WalletMultiButton />
-                  <WalletDisconnectButton />
                   {children}
                 </SearchContext.Provider>
               </ThemeContext.Provider>
