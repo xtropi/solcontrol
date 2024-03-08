@@ -1,5 +1,14 @@
 import { ValidatorType } from "@/api/types";
 
+export const mainRecommended:string[] = [
+  "5yRbBQY5ZKe7VcuuwCS8wVvMfcq41gNctbdhK781Joep",
+  "4nPK76BVEj5Mzy6fctkuZrKieNUpxu6mfWVjNy7fBt9X",
+  "HKebwAfFxtEN1hcFDoCqTLcnynQZ77MrYuN7AAfbyiVb",
+  "4Xz17Lsc6miC7UUVcfbrZhBxgjySEowyH6f8QwwVP6xw",
+  "FyrwfMaomErzqrFUXMjCJ7mA4u81DsiDdrzC3MJD6d4j",
+  "akb7XJkB8rgvDixC25gxpGisNS1aAQbk6HZkR9X1jrX",
+];
+
 export const validators: {data: ValidatorType[]} = {
     "data": [
       {
