@@ -43,19 +43,11 @@ export const ValidatorCard = ({ data }: any) => {
         >
           {data.website}
         </a>
-        <div>
-          Stake: {(data.totalStake/lamports).toFixed()} SOL
-        </div>
-        <div>
-          Fee: {data.fee}%
-        </div>
-        <div>
-          APY: {(data.apy).toPrecision(2)}%
-        </div>
-        <div className="mt-3 mb-1">
-          Description:
-        </div>
-        <p className={`text-base ${theme.cardText}`}>{data.details}</p>
+        <div className="mt-3">Stake: {(data.totalStake / lamports).toFixed()} SOL</div>
+        <div>Fee: {data.fee}%</div>
+        <div>APY: {data.apy.toPrecision(2)}%</div>
+        {/* {data.details && <div className="mt-3 mb-1">Description:</div>} */}
+        <p className={`text-base mt-3 mb-1 ${theme.cardText}`}>{data.details}</p>
       </div>
     </div>
   );
