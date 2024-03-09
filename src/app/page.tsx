@@ -26,7 +26,7 @@ type ParsedProgramAccountsResponse = Array<{
 type ParsedStakeResponce = {
   pubkey: string;
   voteAccount: string;
-  stake: string;
+  stake: number;
 };
 
 // import { theme } from "./theme";
@@ -38,7 +38,7 @@ const parseProgramAccounts = (
   return data.map((item) => ({
     pubkey: item.pubkey.toBase58(),
     voteAccount: item.account.data.parsed.info.stake.delegation.voter as string,
-    stake: (item.account.lamports / LAMPORTS_PER_SOL).toPrecision(2),
+    stake: item.account.lamports,
   }));
 };
 
@@ -87,11 +87,17 @@ export default function Home() {
     console.log(stakedValidators);
   }, [stakedValidators]);
 
-  const filteredMyValidators = testValidators.data.filter((item) => {
-    return stakedValidators
-      .map((item) => item.voteAccount)
-      .includes(item.voteId);
+  // const filteredMyValidators = testValidators.data.filter((item) => {
+  //   return stakedValidators
+  //     .map((item) => item.voteAccount)
+  //     .includes(item.voteId);
+  // });
+
+  const filteredMyValidators = stakedValidators.map((item) => {
+    const linkedItem = testValidators.data.find((item2)=>item2.voteId===item.voteAccount)
+    return {...linkedItem, stake: item.stake}
   });
+
   const filteredAllValidators = testValidators.data
     // .slice(
     //   !searchParams.isRecommended ? 200 : undefined,
@@ -127,7 +133,7 @@ export default function Home() {
           {filteredAllValidators.length > 0 && (
             <>
               <header className={`${theme.header} ${theme.shadow}`}>
-                <h1 className="text-3xl font-bold">SOL Control</h1>
+                <h1 className="text-3xl font-bold">Recommended</h1>
               </header>
               <div
                 className={`overflow-y-auto px-4 bg-opacity-0 ${theme.containerBackground}`}

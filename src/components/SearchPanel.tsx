@@ -26,6 +26,7 @@ export const SearchPanel = ({ data }: any) => {
   }, [searchParams]);
   return (
     <div className={theme.search+" w-64 p-4 mt-4 ml-4 "}>
+      <h1 className={`grid place-content-center mb-6 text-3xl font-bold ${theme.cardText}`}>SOL Control</h1>
       <div className="grid place-content-center">
         <WalletMultiButton />
       </div>

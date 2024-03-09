@@ -43,8 +43,11 @@ export const ValidatorCard = ({ data }: any) => {
         >
           {data.website}
         </a>
+        {data.stake && <div className="mt-3">
+          My stake: {Math.floor(data.stake / lamports).toString()} SOL
+        </div>}
         <div className="mt-3">
-          Stake: {(data.totalStake / lamports).toFixed()} SOL
+          Total: {Math.floor(data.totalStake / lamports).toString()} SOL
         </div>
         <div>Fee: {data.fee}%</div>
         <div>APY: {data.apy.toPrecision(2)}%</div>
