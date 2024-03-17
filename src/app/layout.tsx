@@ -15,6 +15,7 @@ import {
 import {
   WalletModalProvider,
 } from "@solana/wallet-adapter-react-ui";
+import { LedgerWalletAdapter, PhantomWalletAdapter, SolflareWalletAdapter } from "@solana/wallet-adapter-wallets";
 
 const font = Titillium_Web({ subsets: ["latin"], weight: "300" });
 
@@ -36,7 +37,7 @@ export default function RootLayout({
 
   // You can also provide a custom RPC endpoint.
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
-
+  // const config = {commitment: "confirmed"}
   const wallets = useMemo(
     () => [
       /**
@@ -52,6 +53,9 @@ export default function RootLayout({
        * in the npm package `@solana/wallet-adapter-wallets`.
        */
       // new UnsafeBurnerWalletAdapter(),
+      new PhantomWalletAdapter(),
+      new SolflareWalletAdapter(),
+      new LedgerWalletAdapter(),
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [network]
