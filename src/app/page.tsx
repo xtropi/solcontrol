@@ -23,6 +23,8 @@ import {
   StakeProgram,
 } from "@solana/web3.js";
 import { Button } from "@/components/Button";
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import { Spinner } from "@/components/Spinner";
 require("@solana/wallet-adapter-react-ui/styles.css");
 
 type ParsedProgramAccountsResponse = Array<{
@@ -60,26 +62,33 @@ export default function Home() {
   const [stakedValidators, setStakedValidators] = useState<
     ParsedStakeResponce[]
   >([]);
+  const [isLoading, setLoading] = useState(false);
 
   const fetchValidators = useCallback(() => {
     if (!publicKey) {
       setStakedValidators([]);
       return;
     }
-    promiseStakes().then((data) => {
-      if (!data) return;
-      // connection.getVoteAccounts().then((voteAccountsRes)=>{
-      //   const voteAccounts = voteAccountsRes.current.concat(voteAccountsRes.delinquent)
-      // console.log(voteAccounts)
-      // });
-      setStakedValidators(data);
-    });
+    setLoading(true);
+    promiseStakes()
+      .then((data) => {
+        if (!data) return;
+        // connection.getVoteAccounts().then((voteAccountsRes)=>{
+        //   const voteAccounts = voteAccountsRes.current.concat(voteAccountsRes.delinquent)
+        // console.log(voteAccounts)
+        // });
+        setStakedValidators(data);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, [publicKey, setStakedValidators]);
 
   const handleUnStake = () => {};
   const handleStake = async () => {
     if (!publicKey || !wallet) return;
     try {
+      setLoading(true);
       const stakeAccount = new Keypair();
       const votePubkey = new PublicKey(
         "AAadM4rHci2f4X1jjBF3igEaP3zs8WbYKiBEhbziS3jF"
@@ -133,6 +142,8 @@ export default function Home() {
     } catch (e) {
       console.log("ERROR:");
       console.log(e);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -189,28 +200,36 @@ export default function Home() {
     <div className="min-h-screen flex flex-col">
       <div className="flex-1 flex flex-col sm:flex-row">
         <main className={`flex-1 bg-opacity-0 ${theme.pageBackground}`}>
+          <header className={`${theme.header} ${theme.shadow}`}>
+            <div className="flex">
+              {isLoading && <Spinner className="mt-2 mb-2 mr-4 "/>}
+            <h1 className="text-3xl font-bold mr-8 ">Your stakes</h1>
+              <WalletMultiButton />
+            </div>
+          </header>
           {filteredMyValidators.length > 0 && (
-            <>
-              <header className={`${theme.header} ${theme.shadow}`}>
-                <h1 className="text-3xl font-bold">Your stakes</h1>
-              </header>
-              <div
-                className={`overflow-y-auto px-4 mb-16 bg-opacity-0 ${theme.containerBackground}`}
-              >
-                <Grid>
-                  {filteredMyValidators.map((validator: any, index: number) => (
-                    <ValidatorCard key={index} data={validator} />
-                  ))}
-                </Grid>
-              </div>
-            </>
+            <div
+              className={`overflow-y-auto px-4 mb-16 bg-opacity-0 ${theme.containerBackground}`}
+            >
+              <Grid>
+                {filteredMyValidators.map((validator: any, index: number) => (
+                  <ValidatorCard key={index} data={validator} />
+                ))}
+              </Grid>
+            </div>
           )}
 
           {filteredAllValidators.length > 0 && (
             <>
               <header className={`${theme.header} ${theme.shadow}`}>
-                <h1 className="text-3xl font-bold">Recommended</h1>
-                <Button onClick={handleStake}>Stake</Button>
+                <div className="flex">
+                <h1 className="text-3xl font-bold mr-4">Recommended</h1>
+                {wallet?.readyState && (
+                  <Button onClick={handleStake} loading={isLoading}>
+                    Make a Stake
+                  </Button>
+                )}
+                </div>
               </header>
               <div
                 className={`overflow-y-auto px-4 bg-opacity-0 ${theme.containerBackground}`}
