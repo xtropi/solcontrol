@@ -14,7 +14,7 @@ export const ValidatorCard = ({ data }: any) => {
   return (
     <div
       className={`
-    max-w-md flex flex-col lg:flex-row rounded overflow-hidden ${theme.shadow} 
+    max-w-l flex flex-col lg:flex-row rounded overflow-hidden ${theme.shadow} 
     h-full w-full rounded-md
     ${theme.cardBackground} ${theme.cardText}
     `}
@@ -32,7 +32,7 @@ export const ValidatorCard = ({ data }: any) => {
         alt="Validator Icon"
       /> */}
 
-      <div className="p-4 flex-grow bg-opacity-70">
+      <div className="p-3 flex-grow bg-opacity-70">
         <div className={`font-bold text-xl mb-2 ${theme.cardText}`}>
           {data.name}
         </div>
@@ -43,11 +43,18 @@ export const ValidatorCard = ({ data }: any) => {
         >
           {data.website}
         </a>
-        <div className="mt-3">Stake: {(data.totalStake / lamports).toFixed()} SOL</div>
+        {data.stake && <div className="mt-3">
+          My stake: {Math.floor(data.stake / lamports).toString()} SOL
+        </div>}
+        <div className="mt-3">
+          Total: {Math.floor(data.totalStake / lamports).toString()} SOL
+        </div>
         <div>Fee: {data.fee}%</div>
         <div>APY: {data.apy.toPrecision(2)}%</div>
         {/* {data.details && <div className="mt-3 mb-1">Description:</div>} */}
-        <p className={`text-base mt-3 mb-1 ${theme.cardText}`}>{data.details}</p>
+        {/* <p className={`text-base mt-3 mb-1 ${theme.cardText}`}>
+          {data.details}
+        </p> */}
       </div>
     </div>
   );

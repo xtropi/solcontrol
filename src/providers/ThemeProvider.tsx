@@ -33,7 +33,7 @@ export const initThemes: { light: ThemeType; dark: ThemeType } = {
     header: `bg-slate-950 text-gray-300 rounded-lg shadow p-4 m-4`,
     footer: `bg-slate-950 text-gray-300 rounded-lg shadow p-4 m-4`,
     sidebars: `bg-slate-950`,
-    search: `h-32 w-64 p-4 mt-4 ml-4 bg-slate-950 bg-opacity-60 rounded-md`,
+    search: `bg-slate-950 bg-opacity-60 rounded-md`,
     shadow: `shadow-xl `,
   },
 };
