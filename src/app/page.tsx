@@ -1,5 +1,11 @@
 "use client";
-import { ChangeEventHandler, useCallback, useContext, useEffect, useState } from "react";
+import {
+  ChangeEventHandler,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { Grid } from "@/components/Grid";
 import { ValidatorCard } from "@/components/ValidatorCard";
 import {
@@ -55,7 +61,7 @@ const parseProgramAccounts = (
     }));
 };
 
-const RANDOM = Math.random()
+const RANDOM = Math.random();
 
 export default function Home() {
   const [theme, setTheme] = useContext(ThemeContext);
@@ -67,8 +73,9 @@ export default function Home() {
   >([]);
   const [isLoading, setLoading] = useState(false);
   const [isModal, setModal] = useState(false);
-  const [balance, setBalance] = useState<number|undefined>();
+  const [balance, setBalance] = useState<number | undefined>();
   const [amount, setAmount] = useState(1);
+  const [filteredAllValidators, setFilteredAllValidators] = useState<any>([]);
 
   const fetchValidators = useCallback(() => {
     if (!publicKey) {
@@ -153,7 +160,12 @@ export default function Home() {
 
   const handleModalAccept = async () => {
     setModal(false);
-    const amountPerEach = Math.floor(amount/filteredAllValidators.length)
+    const amountPerEach = amount / filteredAllValidators.length;
+    // Min amount check
+    if (balance && amountPerEach < 1 && amount < balance) {
+      console.log("Min amount check failed.");
+      return;
+    }
     for (let item of filteredAllValidators) {
       await handleStake(item.voteId, amountPerEach);
     }
@@ -190,6 +202,23 @@ export default function Home() {
   useEffect(() => {
     console.log(stakedValidators);
   }, [stakedValidators]);
+  useEffect(() => {
+    const slicePart = 20;
+    const sliceFrom = RANDOM * (testValidators.data.length - slicePart);
+    const sliceTo = sliceFrom + slicePart;
+    const newFiltered = testValidators.data
+    .slice(
+      !searchParams.isRecommended ? sliceFrom : undefined,
+      !searchParams.isRecommended ? sliceTo : undefined
+    )
+    .filter((item) => {
+      const isEmpty = !item.name && (!item.website || !item.details);
+      if (!searchParams.isRecommended) return !isEmpty;
+      return !isEmpty && testRecommended.includes(item.validatorId);
+    })
+    setFilteredAllValidators(newFiltered)
+    setAmount(newFiltered.length)
+  }, [searchParams.isRecommended]);
 
   // const filteredMyValidators = testValidators.data.filter((item) => {
   //   return stakedValidators
@@ -203,29 +232,15 @@ export default function Home() {
     );
     return { ...linkedItem, stake: item.stake };
   });
-  const slicePart = 10;
-  const sliceFrom = RANDOM*(testValidators.data.length-slicePart);
-  const sliceTo = sliceFrom+slicePart;
-  const filteredAllValidators = testValidators.data
-    .slice(
-      !searchParams.isRecommended ? sliceFrom : undefined,
-      !searchParams.isRecommended ? sliceTo : undefined
-    )
-    .filter((item) => {
-      const isEmpty = !item.name && (!item.website || !item.details);
-      if (!searchParams.isRecommended) return !isEmpty;
-      return !isEmpty && testRecommended.includes(item.validatorId);
-    });
 
   const handleStakeButton = async () => {
     setModal(true);
   };
-  const handleAmountChange:ChangeEventHandler<HTMLInputElement> = (_event) => {
+  const handleAmountChange: ChangeEventHandler<HTMLInputElement> = (_event) => {
     setAmount(parseInt(_event.currentTarget.value));
   };
 
   // useEffect(()=>{console.log(amount)}, [amount])
-
   return (
     <div className="min-h-screen flex flex-col">
       <div className="flex-1 flex flex-col sm:flex-row">
@@ -237,11 +252,11 @@ export default function Home() {
               <WalletMultiButton />
               {balance && (
                 <h3 className="flex text-xl ml-16 mt-2 ">
-                  Balance: 
+                  Balance:
                   <div className="dark:text-green-300 mx-2">
-                  {(balance / LAMPORTS_PER_SOL).toFixed(4)}
+                    {(balance / LAMPORTS_PER_SOL).toFixed(4)}
                   </div>
-                     SOL
+                  SOL
                 </h3>
               )}
             </div>
@@ -262,25 +277,39 @@ export default function Home() {
             <>
               <header className={`${theme.header} ${theme.shadow}`}>
                 <div className="flex">
-                  <h1 className="text-3xl font-bold mr-4 mt-2">{searchParams.isRecommended ? "Recommended" : "Absolute random"}</h1>
+                  <h1 className="text-3xl font-bold mr-4 mt-2">
+                    {searchParams.isRecommended
+                      ? "Recommended"
+                      : "Absolute random"}
+                  </h1>
                   {wallet?.readyState && balance && (
                     <>
                       <Button onClick={handleStakeButton} loading={isLoading}>
                         Make a Stake
                       </Button>
                       <div className="ml-8">
-
-                      <label htmlFor="minmax-range" className="flex mb-2 mx-2 text-sm font-medium text-gray-900 dark:text-white">Amount: {<div className="mx-1 dark:text-green-300">{amount}</div>} SOL</label>
-                      <input
-                        id="minmax-range"
-                        type="range"
-                        min="1"
-                        onChange={handleAmountChange}
-                        max={Math.floor(balance/LAMPORTS_PER_SOL)}
-                        value={amount}
-                        className="w-64 h-4 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+                        <label
+                          htmlFor="minmax-range"
+                          className="flex mb-2 mx-2 text-sm font-medium text-gray-900 dark:text-white"
+                        >
+                          Amount:{" "}
+                          {
+                            <div className="mx-1 dark:text-green-300">
+                              {amount}
+                            </div>
+                          }{" "}
+                          SOL
+                        </label>
+                        <input
+                          id="minmax-range"
+                          type="range"
+                          min={filteredAllValidators.length}
+                          onChange={handleAmountChange}
+                          max={Math.floor(balance / LAMPORTS_PER_SOL)}
+                          value={amount}
+                          className="w-64 h-4 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
                         ></input>
-                        </div>
+                      </div>
                     </>
                   )}
                 </div>
