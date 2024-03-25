@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { ChangeEventHandler, useCallback, useContext, useEffect, useState } from "react";
 import { Grid } from "@/components/Grid";
 import { ValidatorCard } from "@/components/ValidatorCard";
 import {
@@ -25,6 +25,7 @@ import {
 import { Button } from "@/components/Button";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { Spinner } from "@/components/Spinner";
+import { Modal } from "@/components/Modal";
 require("@solana/wallet-adapter-react-ui/styles.css");
 
 type ParsedProgramAccountsResponse = Array<{
@@ -63,6 +64,9 @@ export default function Home() {
     ParsedStakeResponce[]
   >([]);
   const [isLoading, setLoading] = useState(false);
+  const [isModal, setModal] = useState(false);
+  const [balance, setBalance] = useState<number|undefined>();
+  const [amount, setAmount] = useState(1);
 
   const fetchValidators = useCallback(() => {
     if (!publicKey) {
@@ -84,21 +88,19 @@ export default function Home() {
       });
   }, [publicKey, setStakedValidators]);
 
-  const handleUnStake = () => {};
-  const handleStake = async () => {
+  const handleUnstake = () => {};
+  const handleStake = async (value: string, amount: number) => {
     if (!publicKey || !wallet) return;
     try {
       setLoading(true);
       const stakeAccount = new Keypair();
-      const votePubkey = new PublicKey(
-        "AAadM4rHci2f4X1jjBF3igEaP3zs8WbYKiBEhbziS3jF"
-      );
+      const votePubkey = new PublicKey(value);
 
       const minimumRent = await connection.getMinimumBalanceForRentExemption(
         StakeProgram.space
       );
       // This is can be user input. For now, we'll hardcode to 1 SOL - Testnet minimum
-      const amountUserWantsToStake = LAMPORTS_PER_SOL;
+      const amountUserWantsToStake = LAMPORTS_PER_SOL * amount;
       const amountToStake = minimumRent + amountUserWantsToStake;
       const crtx = StakeProgram.createAccount({
         fromPubkey: publicKey,
@@ -147,6 +149,17 @@ export default function Home() {
     }
   };
 
+  const handleModalAccept = async () => {
+    setModal(false);
+    const amountPerEach = Math.floor(amount/filteredAllValidators.length)
+    for (let item of filteredAllValidators) {
+      await handleStake(item.voteId, amountPerEach);
+    }
+  };
+  const handleModalCancel = () => {
+    setModal(false);
+  };
+
   const promiseStakes = useCallback(async () => {
     if (!publicKey || !connection) return;
     return parseProgramAccounts(
@@ -165,6 +178,10 @@ export default function Home() {
   }, [connection, publicKey]);
 
   useEffect(() => {
+    if (!publicKey) return;
+    connection.getBalance(publicKey).then((res) => {
+      setBalance(res);
+    });
     fetchValidators();
   }, [publicKey]);
 
@@ -196,15 +213,31 @@ export default function Home() {
       return !isEmpty && testRecommended.includes(item.validatorId);
     });
 
+  const handleStakeButton = async () => {
+    setModal(true);
+  };
+  const handleAmountChange:ChangeEventHandler<HTMLInputElement> = (_event) => {
+    setAmount(parseInt(_event.currentTarget.value));
+  };
+
+  // useEffect(()=>{console.log(amount)}, [amount])
+
   return (
     <div className="min-h-screen flex flex-col">
       <div className="flex-1 flex flex-col sm:flex-row">
         <main className={`flex-1 bg-opacity-0 ${theme.pageBackground}`}>
           <header className={`${theme.header} ${theme.shadow}`}>
             <div className="flex">
-              {isLoading && <Spinner className="mt-2 mb-2 mr-4 "/>}
-            <h1 className="text-3xl font-bold mr-8 ">Your stakes</h1>
+              {isLoading && <Spinner className="mt-2 mb-2 mr-4 " />}
+              <h1 className="text-3xl font-bold mr-8 ">Your stakes</h1>
               <WalletMultiButton />
+              {balance && (
+                <h3 className="text-xl ml-16 mt-2 ">
+                  {"Balance: " +
+                    (balance / LAMPORTS_PER_SOL).toFixed(4) +
+                    " SOL"}
+                </h3>
+              )}
             </div>
           </header>
           {filteredMyValidators.length > 0 && (
@@ -223,12 +256,27 @@ export default function Home() {
             <>
               <header className={`${theme.header} ${theme.shadow}`}>
                 <div className="flex">
-                <h1 className="text-3xl font-bold mr-4">Recommended</h1>
-                {wallet?.readyState && (
-                  <Button onClick={handleStake} loading={isLoading}>
-                    Make a Stake
-                  </Button>
-                )}
+                  <h1 className="text-3xl font-bold mr-4">Recommended</h1>
+                  {wallet?.readyState && balance && (
+                    <>
+                      <Button onClick={handleStakeButton} loading={isLoading}>
+                        Make a Stake
+                      </Button>
+                      <div className="ml-8">
+
+                      <label htmlFor="minmax-range" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Amount: {amount} SOL</label>
+                      <input
+                        id="minmax-range"
+                        type="range"
+                        min="1"
+                        onChange={handleAmountChange}
+                        max={Math.floor(balance/LAMPORTS_PER_SOL)}
+                        value={amount}
+                        className="w-64 h-4 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+                        ></input>
+                        </div>
+                    </>
+                  )}
                 </div>
               </header>
               <div
@@ -253,6 +301,9 @@ export default function Home() {
         <nav className={`order-first bg-opacity-0 ${theme.sidebars}`}>
           <SearchPanel />
         </nav>
+        {isModal && (
+          <Modal onAccept={handleModalAccept} onCancel={handleModalCancel} />
+        )}
         {/* <aside className={`${theme.sidebars}`}></aside> */}
       </div>
     </div>

@@ -40,6 +40,10 @@ export const SearchPanel = ({ data }: any) => {
           Community recommended
         </span>
       </label>
+
+      <span className="ms-3 text-xl font-medium text-gray-800 dark:text-gray-300">
+          Use at your own risk! Check all the transactions and never trust anyone.
+        </span>
     </div>
   );
 };

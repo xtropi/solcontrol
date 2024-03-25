@@ -3,13 +3,12 @@ import { ValidatorType } from "@/api/types";
 export const testRecommended:string[] = [
   "8buHwxjeC8fnD5MZrTaR8iLsZYKaHJMXLzRD37HqYjLx",
   "G5Q3EBSkTg4xw72nJr5aoYP8zRdAFZaKGEozpFZtFRu7",
-  "td3n5NGhP7JKWrL638gzau3NY7mF4K3ztZww3GkpywJ",
-  "FT9QgTVo375TgDAQusTgpsfXqTosCJLfrBpoVdcbnhtS",
-  "2j4DdDvQxfnbA7fnxLrwvUjqzFMbJ2164cf2VmL3P25N",
-  "1KXoPzQADSNxM8tQvqisQrA8TikDWJs68zYM2HK2Ubh",
-  "93GHkyzoyZrYtmAPpSDrpGmDDQDWsGwGKJTz7JrxozA2",
-  "A1voPbfnmCq8UBNQTBKnZ3Xbhs2x4cS2Gx2b2wJtqCh1",
-  "9Gx6myZBqcVndLT5vf6pEawnqDmjJyB8SfanLTzhWjXU",
+  // "FT9QgTVo375TgDAQusTgpsfXqTosCJLfrBpoVdcbnhtS",
+  // "2j4DdDvQxfnbA7fnxLrwvUjqzFMbJ2164cf2VmL3P25N",
+  // "1KXoPzQADSNxM8tQvqisQrA8TikDWJs68zYM2HK2Ubh",
+  // "93GHkyzoyZrYtmAPpSDrpGmDDQDWsGwGKJTz7JrxozA2",
+  // "A1voPbfnmCq8UBNQTBKnZ3Xbhs2x4cS2Gx2b2wJtqCh1",
+  // "9Gx6myZBqcVndLT5vf6pEawnqDmjJyB8SfanLTzhWjXU",
 ]
 
 export const testValidators: { data: any[] } = {
