@@ -27,10 +27,15 @@ export const SearchPanel = ({ data }: any) => {
   return (
     <div className={theme.search + " w-64 p-4 mt-4 ml-4 "}>
       <h1
-        className={`grid place-content-center mb-6 text-3xl font-bold ${theme.cardText}`}
+        className={`grid place-content-center text-3xl font-bold ${theme.cardText}`}
       >
         SOL Control
       </h1>
+      <h3
+        className={`grid place-content-center mb-6 text-xl text-red-800 ${theme.cardText}`}
+      >
+        Testnet
+      </h3>
 
       <label className="inline-flex items-center cursor-pointer m-3">
         <input
