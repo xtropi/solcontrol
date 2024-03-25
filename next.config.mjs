@@ -5,7 +5,7 @@ const nextConfig = {
     unoptimized: true,
   },
   output: "export",
-  basePath: isProd ? "/" : "/solcontrol",
+  basePath: isProd ? "" : "/solcontrol",
   assetPrefix: "/solcontrol",
 };
 
