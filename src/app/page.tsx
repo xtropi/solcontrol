@@ -55,6 +55,8 @@ const parseProgramAccounts = (
     }));
 };
 
+const RANDOM = Math.random()
+
 export default function Home() {
   const [theme, setTheme] = useContext(ThemeContext);
   const [searchParams, setSearch] = useContext(SearchContext);
@@ -201,12 +203,14 @@ export default function Home() {
     );
     return { ...linkedItem, stake: item.stake };
   });
-
+  const slicePart = 10;
+  const sliceFrom = RANDOM*(testValidators.data.length-slicePart);
+  const sliceTo = sliceFrom+slicePart;
   const filteredAllValidators = testValidators.data
-    // .slice(
-    //   !searchParams.isRecommended ? 200 : undefined,
-    //   !searchParams.isRecommended ? 300 : undefined
-    // )
+    .slice(
+      !searchParams.isRecommended ? sliceFrom : undefined,
+      !searchParams.isRecommended ? sliceTo : undefined
+    )
     .filter((item) => {
       const isEmpty = !item.name && (!item.website || !item.details);
       if (!searchParams.isRecommended) return !isEmpty;
@@ -229,7 +233,7 @@ export default function Home() {
           <header className={`${theme.header} ${theme.shadow}`}>
             <div className="flex">
               {isLoading && <Spinner className="mt-2 mb-2 mr-4 " />}
-              <h1 className="text-3xl font-bold mr-8 ">Your stakes</h1>
+              <h1 className="text-3xl font-bold mr-8 mt-1">Your stakes</h1>
               <WalletMultiButton />
               {balance && (
                 <h3 className="text-xl ml-16 mt-2 ">
@@ -256,7 +260,7 @@ export default function Home() {
             <>
               <header className={`${theme.header} ${theme.shadow}`}>
                 <div className="flex">
-                  <h1 className="text-3xl font-bold mr-4">Recommended</h1>
+                  <h1 className="text-3xl font-bold mr-4 mt-2">{searchParams.isRecommended ? "Recommended" : "Absolute random"}</h1>
                   {wallet?.readyState && balance && (
                     <>
                       <Button onClick={handleStakeButton} loading={isLoading}>
