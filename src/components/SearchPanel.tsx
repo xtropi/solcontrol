@@ -25,8 +25,12 @@ export const SearchPanel = ({ data }: any) => {
     console.log(searchParams);
   }, [searchParams]);
   return (
-    <div className={theme.search+" w-64 p-4 mt-4 ml-4 "}>
-      <h1 className={`grid place-content-center mb-6 text-3xl font-bold ${theme.cardText}`}>SOL Control</h1>
+    <div className={theme.search + " w-64 p-4 mt-4 ml-4 "}>
+      <h1
+        className={`grid place-content-center mb-6 text-3xl font-bold ${theme.cardText}`}
+      >
+        SOL Control
+      </h1>
 
       <label className="inline-flex items-center cursor-pointer m-3">
         <input
@@ -41,9 +45,9 @@ export const SearchPanel = ({ data }: any) => {
         </span>
       </label>
 
-      <span className="ms-3 text-xl font-medium text-gray-800 dark:text-gray-300">
-          Use at your own risk! Check all the transactions and never trust anyone.
-        </span>
+      <span className="text-xl font-medium text-gray-800 dark:text-red-500">
+        Check all the transactions and never trust anyone.
+      </span>
     </div>
   );
 };

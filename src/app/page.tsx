@@ -236,10 +236,12 @@ export default function Home() {
               <h1 className="text-3xl font-bold mr-8 mt-1">Your stakes</h1>
               <WalletMultiButton />
               {balance && (
-                <h3 className="text-xl ml-16 mt-2 ">
-                  {"Balance: " +
-                    (balance / LAMPORTS_PER_SOL).toFixed(4) +
-                    " SOL"}
+                <h3 className="flex text-xl ml-16 mt-2 ">
+                  Balance: 
+                  <div className="dark:text-green-300 mx-2">
+                  {(balance / LAMPORTS_PER_SOL).toFixed(4)}
+                  </div>
+                     SOL
                 </h3>
               )}
             </div>
@@ -268,7 +270,7 @@ export default function Home() {
                       </Button>
                       <div className="ml-8">
 
-                      <label htmlFor="minmax-range" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Amount: {amount} SOL</label>
+                      <label htmlFor="minmax-range" className="flex mb-2 mx-2 text-sm font-medium text-gray-900 dark:text-white">Amount: {<div className="mx-1 dark:text-green-300">{amount}</div>} SOL</label>
                       <input
                         id="minmax-range"
                         type="range"
