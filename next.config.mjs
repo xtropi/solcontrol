@@ -5,7 +5,7 @@ const nextConfig = {
   },
   output: "export",
   // basePath: "/xtropi.github.io",
-  // assetPrefix: "/solcontrol",
+  assetPrefix: "/solcontrol",
 };
 
 export default nextConfig;
